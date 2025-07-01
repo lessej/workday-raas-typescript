@@ -16,6 +16,7 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
+    "fast-xml-parser": "^5.2.5",
     "jwt-decode": "^4.0.0"
   }
 }

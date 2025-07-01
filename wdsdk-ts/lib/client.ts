@@ -1,6 +1,7 @@
 import { jwtDecode, JwtPayload } from "jwt-decode"
 import { WorkdayRequest } from "./request.js"
 import { WorkdayRequestJson } from "./json.js"
+import { WorkdayRequestXml } from "./xml.js"
 
 type TokenResponse = { access_token: string }
 
@@ -12,6 +13,7 @@ type IsuCredentials = {
 
 interface WorkdayClientImpl {
   json: (endpoint: string) => WorkdayRequest
+  xml: (endpoint: string) => WorkdayRequest
 }
 
 export class WorkdayClient implements WorkdayClientImpl {
@@ -52,17 +54,27 @@ export class WorkdayClient implements WorkdayClientImpl {
       Authorization: `Basic ${encodedToken}`,
     }
 
-    const res = await fetch(this.authEndpoint, {
-      method: "POST",
-      body: body.toString(),
-      headers: headers,
-    })
+    try {
+      const res = await fetch(this.authEndpoint, {
+        method: "POST",
+        body: body.toString(),
+        headers: headers,
+      })
 
-    const jsonRes = await res.json() 
-    return (jsonRes as TokenResponse).access_token
+      const jsonRes = await res.json() 
+      return (jsonRes as TokenResponse).access_token
+    } catch (err) {
+      return ""
+
+    }
+
   }
 
   json(endpoint: string): WorkdayRequest {
     return new WorkdayRequestJson(this, endpoint, "json")
+  }
+
+  xml(endpoint: string): WorkdayRequest {
+    return new WorkdayRequestXml(this, endpoint, "xml")
   }
 }

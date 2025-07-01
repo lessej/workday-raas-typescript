@@ -1,6 +1,6 @@
 import { WorkdayClient } from "./client.js"
 
-type OutputFormat = "json"
+type OutputFormat = "json" | "xml"
 
 interface WorkdayRequestImpl {
   param: (key: string, val: string) => WorkdayRequest
@@ -14,6 +14,7 @@ export abstract class WorkdayRequest implements WorkdayRequestImpl {
   constructor(client: WorkdayClient, endpoint: string, outputFormat: OutputFormat) {
     const apiEndpoint = new URL(endpoint)
     switch (outputFormat) {
+      case "xml": break;
       case "json":
       default:
         apiEndpoint.searchParams.append("format", "json")
