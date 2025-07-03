@@ -1,26 +1,19 @@
-import { WorkdayClient } from "./client.js"
-
-type OutputFormat = "json" | "xml"
+import { XMLParser } from "fast-xml-parser"
 
 interface WorkdayRequestImpl {
   param: (key: string, val: string) => WorkdayRequest
-  send: (req: WorkdayRequest) => Promise<JSON>
+  json: (parse: boolean) => Promise<any | JSON>
+  xml: (parse: boolean) => Promise<any | JSON>
 }
 
-export abstract class WorkdayRequest implements WorkdayRequestImpl {
-  protected endpoint: URL
-  protected client: WorkdayClient
+export class WorkdayRequest implements WorkdayRequestImpl {
+  private endpoint: URL
+  protected authRequest: () => Promise<string>
 
-  constructor(client: WorkdayClient, endpoint: string, outputFormat: OutputFormat) {
+  constructor(endpoint: string, authRequest: () => Promise<string>) {
     const apiEndpoint = new URL(endpoint)
-    switch (outputFormat) {
-      case "xml": break;
-      case "json":
-      default:
-        apiEndpoint.searchParams.append("format", "json")
-    }
     this.endpoint = apiEndpoint
-    this.client = client
+    this.authRequest = authRequest
     return this
   }
 
@@ -29,5 +22,40 @@ export abstract class WorkdayRequest implements WorkdayRequestImpl {
     return this
   }
 
-  abstract send(): Promise<any>
+  private async getWorkdayRes(): Promise<Response> {
+    const endpoint = this.endpoint.toString()
+    const token = await this.authRequest()
+    const headers = { Authorization: `Bearer ${token}` }
+    const res = await fetch(endpoint, {
+      method: "GET",
+      headers: headers,
+    })
+
+    return res
+  }
+
+  async json(parse: boolean = true): Promise<any | JSON> {
+    this.endpoint.searchParams.append("format", "json")
+    const res = await this.getWorkdayRes()
+
+    if (parse) {
+      const jsonRes = await res.json()
+      return jsonRes
+    }
+
+    const textRes = await res.text()
+    return textRes
+  }
+
+  async xml(parse: boolean = true): Promise<any | JSON> {
+    const res = await this.getWorkdayRes()
+    const textRes = await res.text()
+
+    if (parse) {
+      const parser = new XMLParser()
+      return parser.parse(textRes)
+    }
+
+    return textRes
+  }
 }

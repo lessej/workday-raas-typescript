@@ -1,7 +1,5 @@
 import { jwtDecode, JwtPayload } from "jwt-decode"
 import { WorkdayRequest } from "./request.js"
-import { WorkdayRequestJson } from "./json.js"
-import { WorkdayRequestXml } from "./xml.js"
 
 type TokenResponse = { access_token: string }
 
@@ -12,8 +10,7 @@ type IsuCredentials = {
 }
 
 interface WorkdayClientImpl {
-  json: (endpoint: string) => WorkdayRequest
-  xml: (endpoint: string) => WorkdayRequest
+  request: (endpoint: string) => WorkdayRequest
 }
 
 export class WorkdayClient implements WorkdayClientImpl {
@@ -35,7 +32,7 @@ export class WorkdayClient implements WorkdayClientImpl {
     return Date.now() >= exp * 1000
   }
 
-  async auth(): Promise<string> {
+  private async auth(): Promise<string> {
     if (!this.token || this.isTokenExpired(this.token)) {
       const token = await this.getToken()
       this.token = token
@@ -65,16 +62,13 @@ export class WorkdayClient implements WorkdayClientImpl {
       return (jsonRes as TokenResponse).access_token
     } catch (err) {
       return ""
-
     }
-
   }
 
-  json(endpoint: string): WorkdayRequest {
-    return new WorkdayRequestJson(this, endpoint, "json")
-  }
-
-  xml(endpoint: string): WorkdayRequest {
-    return new WorkdayRequestXml(this, endpoint, "xml")
+  request(endpoint: string): WorkdayRequest {
+    const authRequest = () => {
+      return this.auth()
+    }
+    return new WorkdayRequest(endpoint, authRequest)
   }
 }
