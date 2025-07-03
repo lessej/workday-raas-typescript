@@ -1,21 +1,28 @@
 {
   "name": "wdsdk",
+  "author": "lessej",
+  "description": "A TypeScript client library for interacting with Workday Reports-as-a-Service APIs.",
   "type": "module",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest",
+    "format": "prettier lib --write"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["workday", "raas", "reports-as-a-service"],
   "license": "ISC",
-  "description": "",
   "devDependencies": {
     "@types/node": "^24.0.4",
+    "prettier": "^3.6.2",
     "typescript": "^5.8.3",
     "vitest": "^3.2.4"
   },
   "dependencies": {
     "jwt-decode": "^4.0.0"
+  },
+  "prettier": {
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": false
   }
 }
