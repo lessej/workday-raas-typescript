@@ -27,7 +27,7 @@ The library provides two utility classes: `RaasClient` and `WorkdayRequest`.  Th
 const credentials: IsuCredentials = {
     clientId: "myClientId",
     clientSecret: "myClientSecret",
-    refreshToken": "myRefreshToken",
+    refreshToken: "myRefreshToken",
 }
 const authEndpoint = "authEndpoint"
 
