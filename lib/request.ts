@@ -21,7 +21,7 @@ const formatQueryParams = (params: string | string[]): string => {
  *
  * @example
  * ```ts
- * const res = await client.request("my-endpoing.workday.com")
+ * const res = await client.request("my-endpoint.workday.com")
  *   .param("my key", "my val")
  *   .param("my second key", ["possible", "vals"])
  *   .json()
@@ -64,7 +64,7 @@ export class WorkdayRequest implements WorkdayRequestImpl {
    *
    * @example
    * ```ts
-   * const res = await client.request("my-endpoing.workday.com")
+   * const res = await client.request("my-endpoint.workday.com")
    *   .param("my key", "my val")
    *   .param("my second key", ["possible", "vals"])
    *
@@ -85,7 +85,7 @@ export class WorkdayRequest implements WorkdayRequestImpl {
    *
    * @example
    * ```ts
-   * const res = await client.request("my-endpoing.workday.com")
+   * const res = await client.request("my-endpoint.workday.com")
    *   .param("my key", "my val")
    *   .param("my second key", ["possible", "vals"])
    *   .json()
@@ -114,7 +114,7 @@ export class WorkdayRequest implements WorkdayRequestImpl {
    *
    * @example
    * ```ts
-   * const res = await client.request("my-endpoing.workday.com")
+   * const res = await client.request("my-endpoint.workday.com")
    *   .param("my key", "my val")
    *   .param("my second key", ["possible", "vals"])
    *   .xml()
@@ -139,7 +139,7 @@ export class WorkdayRequest implements WorkdayRequestImpl {
    *
    * @example
    * ```ts
-   * const res = await client.request("my-endpoing.workday.com")
+   * const res = await client.request("my-endpoint.workday.com")
    *   .param("my key", "my val")
    *   .param("my second key", ["possible", "vals"])
    *   .csv()
